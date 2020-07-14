@@ -3,3 +3,9 @@
 .sdformat/
 .vscode/
 .bash_history
+src/
+bags/
+build*
+.cmake
+.catkin_workspace
+
