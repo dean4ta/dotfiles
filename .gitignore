@@ -1,5 +1,5 @@
-.gazebo/*
-.local/*
-.sdformat/*
-.vscode/*
+.gazebo/
+.local/
+.sdformat/
+.vscode/
 .bash_history
