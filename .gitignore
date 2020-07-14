@@ -1,0 +1,5 @@
+.gazebo/*
+.local/*
+.sdformat/*
+.vscode/*
+.bash_history
