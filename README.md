@@ -5,14 +5,15 @@ Dotfiles
 ## Running via Docker
 
 ```shell
-docker volume create ros-container-root
-docker build -t pvishal/shell .
-./run.bash
+# set environment variables in .env
+make build
+make up-display # make up # for no display
 ```
 
 ## Running on host
 
 ```shell
-git clone https://github.com/pvishal/dotfiles.git ~/dotfiles
+git clone https://github.com/pvishal/dotfiles.git 
+~/dotfiles
 ~/dotfiles/setup.sh
 ```
