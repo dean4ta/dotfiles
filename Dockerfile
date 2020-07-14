@@ -42,8 +42,10 @@ RUN echo $TZ > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
 
 # Add version info from Github to invalidate the cache if the repo has been updated
-ADD https://api.github.com/repos/pvishal/dotfiles/git/refs/heads/master /root/.dotfile.version.json
-RUN git clone https://github.com/pvishal/dotfiles.git /root/dotfiles && \
+ARG GIT_USERNAME
+ENV GIT_USERNAME=${GIT_USERNAME}
+ADD https://api.github.com/repos/${GIT_USERNAME}/dotfiles/git/refs/heads/master /root/.dotfile.version.json
+RUN git clone https://github.com/${GIT_USERNAME}/dotfiles.git /root/dotfiles && \
     /root/dotfiles/setup.sh
 
 WORKDIR /code
