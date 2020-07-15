@@ -33,6 +33,39 @@ RUN apt-get update && \
     ros-melodic-map-server ros-melodic-amcl ros-melodic-move-base ros-melodic-dwa-local-planner && \
     rm -rf /var/lib/apt/lists/*
 
+# Install KimeraVIO dependencies
+RUN apt-get update && \
+    apt-get install -y ros-melodic-image-geometry ros-melodic-pcl-ros ros-melodic-cv-bridge && \
+    apt-get install -y --no-install-recommends apt-utils && \
+    apt-get install -y cmake build-essential unzip pkg-config autoconf \
+      libboost-all-dev \
+      libjpeg-dev libpng-dev libtiff-dev \
+      libvtk6-dev libgtk-3-dev \
+      libatlas-base-dev gfortran \
+      libparmetis-dev \
+      python-wstool python-catkin-tools
+
+RUN apt-get install -y libtbb-dev
+
+WORKDIR /root/src
+RUN git clone https://github.com/MIT-SPARK/Kimera-VIO-ROS.git
+
+RUN wstool init && \
+    wstool merge Kimera-VIO-ROS/install/kimera_vio_ros_https.rosinstall && \
+    wstool update
+
+WORKDIR /root
+COPY . .
+
+RUN catkin init && \
+    catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release && \
+    catkin config --merge-devel
+
+RUN rosdep install --from-paths src --ignore-src -r -y
+
+RUN catkin build
+
+RUN source /root/src/devel/setup.bash
 
 # Set up timezone
 ENV TZ 'America/Los_Angeles'
@@ -45,8 +78,7 @@ RUN echo $TZ > /etc/timezone && \
 ARG GIT_USERNAME
 ENV GIT_USERNAME=${GIT_USERNAME}
 ADD https://api.github.com/repos/${GIT_USERNAME}/dotfiles/git/refs/heads/master /root/.dotfile.version.json
-RUN git clone https://github.com/${GIT_USERNAME}/dotfiles.git /root/dotfiles && \
-    /root/dotfiles/setup.sh
+RUN /root/dotfiles/setup.sh
 
 WORKDIR /code
 VOLUME /code
