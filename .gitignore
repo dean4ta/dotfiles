@@ -3,3 +3,5 @@
 .sdformat/
 .vscode/
 .bash_history
+bags/
+.ros/
