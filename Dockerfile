@@ -12,7 +12,6 @@ ENV NVIDIA_VISIBLE_DEVICES \
 ENV NVIDIA_DRIVER_CAPABILITIES \
     ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
 
-
 # Setup Locales
 RUN apt-get update && apt-get install -y locales
 ENV LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" LANGUAGE="en_US.UTF-8"
@@ -33,6 +32,20 @@ RUN apt-get update && \
     ros-melodic-map-server ros-melodic-amcl ros-melodic-move-base ros-melodic-dwa-local-planner && \
     rm -rf /var/lib/apt/lists/*
 
+# ROVIO build and installation of dependencies
+RUN apt-get update && \
+    apt-get install -y python-catkin-tools
+WORKDIR /root/src
+RUN git clone https://github.com/ethz-asl/rovio.git && \
+    git clone https://github.com/ethz-asl/kindr.git && \
+    cd rovio && \
+    git submodule update --init --recursive
+WORKDIR /root
+RUN source /opt/ros/melodic/setup.bash && \
+    catkin init && \
+    catkin build --cmake-args -DCMAKE_BUILD_TYPE=Release && \
+    source devel/setup.bash
+COPY . .
 
 # Set up timezone
 ENV TZ 'America/Los_Angeles'
