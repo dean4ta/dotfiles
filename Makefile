@@ -7,10 +7,11 @@ DISPLAY_FORWARDING_FLAGS := --env="DISPLAY" \
 	--env="XAUTHORITY=$(XAUTH)" \
 	--volume="$(XAUTH):$(XAUTH)" \
 	--volume="/tmp:/tmp:rw"
+GPU_FLAGS := --gpus=all
 
 DOCKER_RUN = docker run --rm -it\
   --workdir $(SOURCE_MOUNT) \
-  --volume $(shell pwd):$(SOURCE_MOUNT) \
+  --mount type=volume,source=$(shell pwd),target=$(SOURCE_MOUNT) \
 	$(if $(FORWARD_X),$(DISPLAY_FORWARDING_FLAGS)) \
 	$(if $(USE_GPU),$(GPU_FLAGS)) \
   $(CONTAINER)
