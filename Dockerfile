@@ -57,13 +57,16 @@ RUN git clone https://github.com/IntelRealSense/realsense-ros.git && \
     cd .. && \
     git clone https://github.com/pal-robotics/ddynamic_reconfigure
 
+# Hummingbird Bringup
+RUN mkdir -p /root/src/hummingbird_bringup
+COPY src/hummingbird_bringup /root/src/hummingbird_bringup
+
 # build workspace
 WORKDIR /root
 RUN source /opt/ros/melodic/setup.bash && \
     catkin init && \
     catkin build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCATKIN_ENABLE_TESTING=False && \
     echo "source /root/devel/setup.bash" >> .bashrc
-VOLUME [ "/root/data" ]
 
 # Set up timezone
 ENV TZ 'America/Los_Angeles'
