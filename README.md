@@ -34,8 +34,8 @@ roslaunch rovio rovio_node.launch
 ```
 
 ### Todo
-- [ ] source workspace on launch
-- [ ] mount container directories to host system
+- [x] source workspace on launch
+- [x] mount container directories to host system (only mounting bags folder)
 - [ ] add support for D435i
 - [ ] simulate with FlightGoggles?
 - [ ] if many more git repos are used, use something like git subodules, wstool, or rosinstall

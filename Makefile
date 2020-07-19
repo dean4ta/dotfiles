@@ -10,11 +10,11 @@ DISPLAY_FORWARDING_FLAGS := --env="DISPLAY" \
 GPU_FLAGS := --gpus=all
 
 DOCKER_RUN = docker run --rm -it\
-  --workdir $(SOURCE_MOUNT) \
-  --mount type=volume,source=$(shell pwd),target=$(SOURCE_MOUNT) \
+	--workdir $(SOURCE_MOUNT) \
+	-v $(shell pwd)/bags:/root/bags \
 	$(if $(FORWARD_X),$(DISPLAY_FORWARDING_FLAGS)) \
 	$(if $(USE_GPU),$(GPU_FLAGS)) \
-  $(CONTAINER)
+	$(CONTAINER)
 
 .PHONY: help
 help: ## Display this help message

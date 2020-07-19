@@ -5,3 +5,5 @@
 .bash_history
 bags/
 .ros/
+.nv/
+.ignition/

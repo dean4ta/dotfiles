@@ -35,7 +35,6 @@ RUN apt-get update && \
 # ROVIO build and installation of dependencies
 RUN apt-get update && \
     apt-get install -y python-catkin-tools
-VOLUME [ "/root/src", "/root/devel", "/root/build" ]
 WORKDIR /root/src
 RUN git clone https://github.com/ethz-asl/rovio.git && \
     git clone https://github.com/ethz-asl/kindr.git && \
@@ -45,7 +44,8 @@ WORKDIR /root
 RUN source /opt/ros/melodic/setup.bash && \
     catkin init && \
     catkin build --cmake-args -DCMAKE_BUILD_TYPE=Release && \
-    source devel/setup.bash
+    echo "source /root/devel/setup.bash" >> .bashrc
+VOLUME [ "/root/data" ]
 
 # Set up timezone
 ENV TZ 'America/Los_Angeles'
@@ -60,9 +60,6 @@ ENV GIT_USERNAME=${GIT_USERNAME}
 ADD https://api.github.com/repos/${GIT_USERNAME}/dotfiles/git/refs/heads/master /root/.dotfile.version.json
 RUN git clone https://github.com/${GIT_USERNAME}/dotfiles.git /root/dotfiles && \
     /root/dotfiles/setup.sh
-
-WORKDIR /code
-VOLUME /code
 
 # Enable colors
 ENV TERM=xterm-256color
