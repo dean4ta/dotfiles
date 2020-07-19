@@ -36,7 +36,12 @@ roslaunch rovio rovio_node.launch
 ### Todo
 - [x] source workspace on launch
 - [x] mount container directories to host system (only mounting bags folder)
-- [ ] add support for D435i
+- [x] add support for D435i - in progress
 - [ ] simulate with FlightGoggles?
 - [ ] if many more git repos are used, use something like git subodules, wstool, or rosinstall
 - [ ] try on raspberry pi
+- [ ] instead of mounting hummingbird_bringup, copy to the container in the Dockerfile to build during docker build
+- [ ] fuse imu data (gyro has a faster max fps than the accel but it is throttled to make one imu unified datapoint)
+- [ ] calibrate camera and imu with Kalibr
+- [ ] feed raw images into into rovio with calibration instead of rectified images
+- [ ] disable IR projector on D435i
