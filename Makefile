@@ -10,6 +10,7 @@ DISPLAY_FORWARDING_FLAGS := --env="DISPLAY" \
 GPU_FLAGS := --gpus=all
 
 DOCKER_RUN = docker run --rm -it\
+	--privileged \
 	--workdir $(SOURCE_MOUNT) \
 	-v $(shell pwd)/bags:/root/bags \
 	$(if $(FORWARD_X),$(DISPLAY_FORWARDING_FLAGS)) \
