@@ -45,3 +45,6 @@ roslaunch rovio rovio_node.launch
 - [ ] calibrate camera and imu with Kalibr
 - [ ] feed raw images into into rovio with calibration instead of rectified images
 - [ ] disable IR projector on D435i
+
+### Current Progress
+- `07/19/2020:` [Uncalibrated D435i with ROVIO](https://drive.google.com/file/d/1-D7BJQ109dQNYXzZPIWAQNCqemv22a61/view?usp=sharing)
