@@ -13,6 +13,7 @@ DOCKER_RUN = docker run --rm -it\
 	--privileged \
 	--workdir $(SOURCE_MOUNT) \
 	-v $(shell pwd)/bags:/root/bags \
+	-v $(shell pwd)/src/hummingbird_bringup:/root/src/hummingbird_bringup \
 	$(if $(FORWARD_X),$(DISPLAY_FORWARDING_FLAGS)) \
 	$(if $(USE_GPU),$(GPU_FLAGS)) \
 	$(CONTAINER)
