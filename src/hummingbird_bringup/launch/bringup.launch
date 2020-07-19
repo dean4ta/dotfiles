@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<launch>
+    <include file="$(find hummingbird_bringup)/launch/bringup_D435i.launch" />
+    <include file="$(find rovio)/launch/rovio_node.launch" />
+</launch>
