@@ -7,3 +7,5 @@ bags/
 .ros/
 .nv/
 .ignition/
+*.pdf
+assets/results-cam-homedeanCoderovio_wsdotfilesbagsd435_camera_calibration.txt
