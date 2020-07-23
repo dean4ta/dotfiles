@@ -38,5 +38,6 @@ build: ## Build the container image
 	@echo "Starting Docker build with the following command"
 	@DOCKER_BUILDKIT=1 docker build \
 		--build-arg GIT_USERNAME=$(GIT_USERNAME) \
+		--target $(ENV)_stage \
 		-t \
 		$(CONTAINER) .

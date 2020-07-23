@@ -1,6 +1,6 @@
 ARG BASE_IMAGE=osrf/ros:melodic-desktop-full
 
-FROM $BASE_IMAGE
+FROM $BASE_IMAGE as ros_base
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Use bash
@@ -28,10 +28,10 @@ RUN apt-get update && \
 
 # Install ROS packages. May not be required if that comes in from the base image
 RUN apt-get update && \
-    apt-get install -y ros-melodic-rviz ros-melodic-gmapping \
-    ros-melodic-map-server ros-melodic-amcl ros-melodic-move-base ros-melodic-dwa-local-planner && \
+    apt-get install -y ros-melodic-rviz && \
     rm -rf /var/lib/apt/lists/*
 
+FROM ros_base as package_installation_stage
 # ROVIO build and installation of dependencies
 RUN apt-get update && \
     apt-get install -y python-catkin-tools
@@ -61,6 +61,7 @@ RUN git clone https://github.com/IntelRealSense/realsense-ros.git && \
 RUN mkdir -p /root/src/hummingbird_bringup
 COPY src/hummingbird_bringup /root/src/hummingbird_bringup
 
+FROM package_installation_stage as build_stage
 # build workspace
 WORKDIR /root
 RUN source /opt/ros/melodic/setup.bash && \
@@ -85,5 +86,6 @@ RUN git clone https://github.com/${GIT_USERNAME}/dotfiles.git /root/dotfiles && 
 # Enable colors
 ENV TERM=xterm-256color
 
+FROM build_stage as dev_stage
 COPY ./entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
