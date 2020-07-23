@@ -44,6 +44,8 @@ roslaunch hummingbird_bringup bringup.launch
 
 ---
 
+## Misc
+
 ### Todo
 - [x] source workspace on launch
 - [x] mount container directories to host system (only mounting bags folder)
@@ -60,3 +62,22 @@ roslaunch hummingbird_bringup bringup.launch
 
 ### Current Progress
 - `07/19/2020:` [Uncalibrated D435i with ROVIO](https://drive.google.com/file/d/1-D7BJQ109dQNYXzZPIWAQNCqemv22a61/view?usp=sharing)
+
+### Calibrating the D435i with Kalibr (currently not included in Dockerfile)
+
+Download and extract the Kalibr package [Kalibr-CDE 64-bit](https://github.com/ethz-asl/kalibr/wiki/downloads).
+
+Print an aprilgrid and find the tag size and spacing and make a yaml file describing the aprilgrid
+
+run this command after collecting a bagfile of both infrared cameras looking at the aprilgrid target:
+```shell
+kalibr_calibrate_cameras --bag ../../../dotfiles/bags/d435_camera_calibration.bag --topics /cam0/image_raw /cam1/image_raw --models pinhole-radtan pinhole-radtan --target ../../../assets/aprilgrid.yaml
+```
+or something similar
+
+Tag spacing on [printed apriltag grid](https://github.com/ethz-asl/kalibr/wiki/downloads): 
+```
+a = 0.026m
+b = 0.008m
+tag_spacing = b/a = 0.3076923076923077
+```
