@@ -32,16 +32,16 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 FROM ros_base as package_installation_stage
+## remote packages
+RUN mkdir -p /root/src/remote_packages
+
 # ROVIO build and installation of dependencies
 RUN apt-get update && \
     apt-get install -y python-catkin-tools
-WORKDIR /root/src
-RUN git clone https://github.com/ethz-asl/rovio.git && \
-    git clone https://github.com/ethz-asl/kindr.git && \
-    cd rovio && \
+RUN git clone https://github.com/ethz-asl/rovio.git /root/src/remote_packages/rovio && \
+    git clone https://github.com/ethz-asl/kindr.git /root/src/remote_packages/kindr && \
+    cd /root/src/remote_packages/rovio && \
     git submodule update --init --recursive
-WORKDIR /root
-
 # Intel Realsense install
 RUN apt-get update && \
     echo "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo bionic main" || tee /etc/apt/sources.list.d/realsense-public.list && \
@@ -50,16 +50,17 @@ RUN apt-get update && \
     add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo bionic main" && \
     apt-get install -y librealsense2-dkms && \
     apt-get install -y librealsense2-dev
-WORKDIR /root/src
-RUN git clone https://github.com/IntelRealSense/realsense-ros.git && \
-    cd realsense-ros/ && \
+RUN git clone https://github.com/IntelRealSense/realsense-ros.git /root/src/remote_packages/realsense-ros && \
+    cd /root/src/remote_packages/realsense-ros/ && \
     git checkout `git tag | sort -V | grep -P "^\d+\.\d+\.\d+" | tail -1` && \
-    cd .. && \
-    git clone https://github.com/pal-robotics/ddynamic_reconfigure
+    git clone https://github.com/pal-robotics/ddynamic_reconfigure /root/src/remote_packages/ddynamic_reconfigure
+
+## local packages
+RUN mkdir -p /root/src/local_packages
 
 # Hummingbird Bringup
-RUN mkdir -p /root/src/hummingbird_bringup
-COPY src/hummingbird_bringup /root/src/hummingbird_bringup
+RUN mkdir -p /root/src/local_packages/hummingbird_bringup
+COPY src/hummingbird_bringup /root/src/local_packages/hummingbird_bringup
 
 FROM package_installation_stage as build_stage
 # build workspace
