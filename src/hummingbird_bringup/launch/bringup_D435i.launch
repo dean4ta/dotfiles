@@ -28,7 +28,7 @@
   <arg name="depth_fps"           default="30"/>
   <arg name="infra_fps"           default="30"/>
   <arg name="color_fps"           default="30"/>
-  <arg name="gyro_fps"            default="200"/> <!-- TODO: bring this value back up to 400 and figure out how to fuse "2 imus" in rovio -->
+  <arg name="gyro_fps"            default="400"/> <!-- TODO: bring this value back up to 400 and figure out how to fuse "2 imus" in rovio -->
   <arg name="accel_fps"           default="250"/>
   <arg name="enable_gyro"         default="true"/>
   <arg name="enable_accel"        default="true"/>

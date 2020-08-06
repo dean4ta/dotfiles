@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <launch>
-    <include file="$(find hummingbird_bringup)/launch/bringup_D435i.launch" />
-    <include file="$(find rovio)/launch/rovio_node.launch" />
+    <!-- Usage Arguments -->
+    <arg name="using_d435i" default="true"/>
+    <arg name="using_rovio" default="true"/>
+    <!-- Bagging Params -->
+    <arg name="record_camera_imu" default="false"/>
+    <arg name="bagfile_name" default="camera_imu.bag"/>
+    <arg name="topics_recorded" default="/cam0/image_raw /cam1/image_raw /camera/gyro/sample /camera/accel/sample"/>
+
+    <!-- Launch Camera and IMU -->
+    <group if="$(arg using_d435i)">
+        <include file="$(find hummingbird_bringup)/launch/bringup_D435i.launch"/>
+    </group>
+
+    <!-- record bag to ~/.ros folder -->
+    <group if="$(arg record_camera_imu)">
+        <node pkg="rosbag" type="record" name="rosbag_record_camera_imu"
+        args="record -O $(arg bagfile_name) $(arg topics_recorded)" />
+    </group>
+    
+    <!-- Launch ROVIO -->
+    <group if="$(arg using_rovio)">
+        <node pkg="rovio" type="rovio_node" name="rovio" output="screen">
+            <param name="filter_config" value="$(find rovio)/cfg/rovio.info"/>
+            <param name="camera0_config" value="$(find hummingbird_bringup)/config/cam0_d435i.yaml"/>
+            <param name="camera1_config" value="$(find hummingbird_bringup)/config/cam1_d435i.yaml"/>
+        </node>
+    </group>
 </launch>
