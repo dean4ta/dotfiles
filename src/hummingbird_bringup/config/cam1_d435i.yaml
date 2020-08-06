@@ -1,0 +1,14 @@
+###### Camera Calibration File For Cam 0 of Euroc Datasets ######
+SerialNo: 941322071968
+image_width: 640
+image_height: 480
+camera_name: cam0
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [390.211, 0.0, 321.603, 0.0, 390.216, 239.351, 0.0, 0.0, 1.0]
+distortion_model: radtan
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data:  [0.0171045, -0.00535460, 0.000878554, 0.00216348, 0.0]
