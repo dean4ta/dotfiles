@@ -37,6 +37,7 @@ roslaunch rovio rovio_node.launch
 Using Intel Realsense D435i
 
 ```shell
+# optional to build
 catkin build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCATKIN_ENABLE_TESTING=False
 source /root/devel/setup.bash
 roslaunch hummingbird_bringup bringup.launch
