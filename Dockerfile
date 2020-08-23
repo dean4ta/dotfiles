@@ -23,7 +23,7 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
 
 # Install basic dev tools
 RUN apt-get update && \
-    apt-get install -y apt-utils git lsb-release build-essential software-properties-common stow neovim tmux && \
+    apt-get install -y apt-utils git lsb-release build-essential software-properties-common stow neovim tmux nano && \
     rm -rf /var/lib/apt/lists/*
 
 # Install ROS packages. May not be required if that comes in from the base image
@@ -43,16 +43,10 @@ RUN git clone https://github.com/ethz-asl/rovio.git /root/src/remote_packages/ro
     cd /root/src/remote_packages/rovio && \
     git submodule update --init --recursive
 # Intel Realsense install
-RUN apt-get update && \
-    echo "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo bionic main" || tee /etc/apt/sources.list.d/realsense-public.list && \
-    apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE && \
-    add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo bionic main" && \
-    apt-get install -y librealsense2-dkms && \
-    apt-get install -y librealsense2-dev
+RUN git clone --single-branch --branch v2.37.0 https://github.com/IntelRealSense/librealsense.git /root/src/remote_packages/librealsense
 RUN git clone https://github.com/IntelRealSense/realsense-ros.git /root/src/remote_packages/realsense-ros && \
     cd /root/src/remote_packages/realsense-ros/ && \
-    git checkout `git tag | sort -V | grep -P "^\d+\.\d+\.\d+" | tail -1` && \
+    git checkout `2.2.16` && \
     git clone https://github.com/pal-robotics/ddynamic_reconfigure /root/src/remote_packages/ddynamic_reconfigure
 
 ## local packages
