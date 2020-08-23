@@ -11,7 +11,9 @@ The included Dockerfile produces and image that:
 
 ## Requirements
  - [Docker](https://docs.docker.com/get-docker/)
- - Tested on Ubuntu 18.04
+ - [CUDA 10.2 or CUDA 11.0](https://developer.nvidia.com/cuda-toolkit-archive) for GPU and display support
+ - [NVIDIA Container Toolkit](https://github.com/NVIDIA/nvidia-docker)
+ - Tested on Ubuntu 18.04 and Ubuntu 20.04
 
 ## Running via Docker
 
@@ -60,6 +62,9 @@ roslaunch hummingbird_bringup bringup.launch
 - [ ] feed raw images into into rovio with calibration instead of rectified images
 - [ ] disable IR projector on D435i
 - [ ] convert dockerfile to a multistage build
+- [ ] make an offline version that does not require git cloning. This would speed up docker build process
+- [ ] remove CUDA requirement
+- [ ] add some mechanism to have the latest version of librealsense and realsense-ros that are compatible versions for each other
 
 ### Current Progress
 - `07/19/2020:` [Uncalibrated D435i with ROVIO](https://drive.google.com/file/d/1-D7BJQ109dQNYXzZPIWAQNCqemv22a61/view?usp=sharing)
