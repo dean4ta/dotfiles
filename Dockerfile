@@ -35,26 +35,19 @@ FROM ros_base as package_installation_stage
 ## remote packages
 RUN mkdir -p /root/src/remote_packages
 
-# ROVIO build and installation of dependencies
+# install catkin tools
 RUN apt-get update && \
     apt-get install -y python-catkin-tools
-RUN git clone https://github.com/ethz-asl/rovio.git /root/src/remote_packages/rovio && \
-    git clone https://github.com/ethz-asl/kindr.git /root/src/remote_packages/kindr && \
-    cd /root/src/remote_packages/rovio && \
-    git submodule update --init --recursive
+
 # Intel Realsense install
 RUN git clone --single-branch --branch v2.37.0 https://github.com/IntelRealSense/librealsense.git /root/src/remote_packages/librealsense
 RUN git clone https://github.com/IntelRealSense/realsense-ros.git /root/src/remote_packages/realsense-ros && \
     cd /root/src/remote_packages/realsense-ros/ && \
-    git checkout `2.2.16` && \
+    git checkout `2.2.15` && \
     git clone https://github.com/pal-robotics/ddynamic_reconfigure /root/src/remote_packages/ddynamic_reconfigure
 
 ## local packages
 RUN mkdir -p /root/src/local_packages
-
-# Hummingbird Bringup
-RUN mkdir -p /root/src/local_packages/hummingbird_bringup
-COPY src/hummingbird_bringup /root/src/local_packages/hummingbird_bringup
 
 FROM package_installation_stage as build_stage
 # build workspace
@@ -63,6 +56,16 @@ RUN source /opt/ros/melodic/setup.bash && \
     catkin init && \
     catkin build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCATKIN_ENABLE_TESTING=False && \
     echo "source /root/devel/setup.bash" >> .bashrc
+
+# Install realsense calibration tool (TODO: Make this optional)
+RUN apt-get update && \
+    apt-get install -y libusb-dev libusb-1.0-0-dev && \
+    apt-get install -y libglfw3 libglfw3-dev && \
+    apt-get install -y freeglut3 freeglut3-dev && \
+    echo 'deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo bionic main' | tee /etc/apt/sources.list.d/realsense-public.list && \
+    apt-key adv --keyserver keys.gnupg.net --recv-key 6F3EFCDE && \
+    apt-get update && \
+    apt-get install -y librscalibrationtool
 
 # Set up timezone
 ENV TZ 'America/Los_Angeles'
